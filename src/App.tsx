@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
-import { Mic, Square, Upload, RotateCcw, PlayCircle } from 'lucide-react';
+import { Mic, Upload, RotateCcw } from 'lucide-react';
 
 // URL API Backend
 const API_URL = import.meta.env.VITE_API_URL;
