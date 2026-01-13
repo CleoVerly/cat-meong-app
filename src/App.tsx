@@ -3,7 +3,7 @@ import axios from 'axios';
 import { Mic, Square, Upload, RotateCcw, PlayCircle } from 'lucide-react';
 
 // URL API Backend
-const API_URL = "https://cleoverly-meong-api.hf.space";
+const API_URL = import.meta.env.VITE_API_URL;
 
 // Durasi maksimal rekaman (dalam milidetik) -> 4 Detik
 const MAX_RECORDING_TIME = 4000; 
