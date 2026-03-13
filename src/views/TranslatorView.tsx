@@ -1,11 +1,12 @@
-import React, { useState } from 'react'; // Tambahkan useState
-import type { PredictionResponse } from '../types';
+import React, { useState } from 'react'; 
+import type { PredictionResponse, HistoryItem } from '../types';
 import PredictionModal from '../components/PredictionModal';
 import RecordButton from '../components/RecordButton';
 import AudioPreview from '../components/AudioPreview';
 import UploadInput from '../components/UploadInput';
-import FloatingTaskbar, { type TabType } from '../components/FloatingTaskbar'; // Import komponen & tipenya
-
+import FloatingTaskbar, { type TabType } from '../components/FloatingTaskbar';
+import HistoryView from './HistoryView';
+ 
 interface TranslatorViewProps {
   isRecording: boolean;
   timeLeft: number;
@@ -14,6 +15,12 @@ interface TranslatorViewProps {
   loading: boolean;
   displayError: string;
   prediction: PredictionResponse | null;
+  
+  // Props History
+  history: HistoryItem[];
+  onDeleteHistory: (ids: string[]) => void;
+  onClearHistory: () => void;
+
   onToggleRecord: () => void;
   onRetake: () => void;
   onTranslate: () => void;
@@ -29,6 +36,9 @@ export default function TranslatorView({
   loading,
   displayError,
   prediction,
+  history,
+  onDeleteHistory,
+  onClearHistory,
   onToggleRecord,
   onRetake,
   onTranslate,
@@ -36,9 +46,7 @@ export default function TranslatorView({
   onClosePrediction
 }: TranslatorViewProps) {
   
-  // State untuk melacak tab mana yang sedang aktif (default: 'record')
   const [activeTab, setActiveTab] = useState<TabType>('record');
-
   const isTranslateDisabled = loading || (!isRecording && !mediaBlobUrl && !file);
 
   return (
@@ -48,7 +56,7 @@ export default function TranslatorView({
       <div className="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] bg-indigo-200 rounded-full mix-blend-multiply filter blur-[120px] opacity-40 animate-blob"></div>
       <div className="absolute bottom-[-10%] right-[-10%] w-[500px] h-[500px] bg-purple-200 rounded-full mix-blend-multiply filter blur-[120px] opacity-40 animate-blob animation-delay-2000"></div>
 
-      {/* Konten Halaman: Render berdasarkan activeTab */}
+      {/* KONTEN UTAMA: PEREKAM */}
       {activeTab === 'record' && (
         <div className="bg-white/80 backdrop-blur-2xl border border-white/50 rounded-[2.5rem] shadow-[0_20px_50px_rgba(0,0,0,0.04)] max-w-md w-full p-8 relative z-10 transition-all duration-500 animate-in fade-in slide-in-from-bottom-4">
           
@@ -127,15 +135,16 @@ export default function TranslatorView({
         </div>
       )}
 
-      {/* Placeholder Halaman History */}
+      {/* HALAMAN RIWAYAT KITA */}
       {activeTab === 'history' && (
-        <div className="text-center z-10 animate-in fade-in zoom-in-95 duration-300">
-          <h2 className="text-2xl font-bold text-slate-800 mb-2">Riwayat</h2>
-          <p className="text-slate-500">Fitur riwayat terjemahan akan hadir di sini.</p>
-        </div>
+        <HistoryView 
+          history={history} 
+          onDelete={onDeleteHistory} 
+          onClearAll={onClearHistory} 
+        />
       )}
 
-      {/* Placeholder Halaman Notifikasi */}
+      {/* HALAMAN NOTIFIKASI */}
       {activeTab === 'notification' && (
         <div className="text-center z-10 animate-in fade-in zoom-in-95 duration-300">
           <h2 className="text-2xl font-bold text-slate-800 mb-2">Notifikasi</h2>
@@ -143,7 +152,6 @@ export default function TranslatorView({
         </div>
       )}
 
-      {/* Floating Taskbar Dinamis */}
       <FloatingTaskbar 
         activeTab={activeTab} 
         onTabChange={(tab) => setActiveTab(tab)} 

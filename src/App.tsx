@@ -3,6 +3,7 @@ import axios from 'axios';
 import type { PredictionResponse } from './types';
 import TranslatorView from './views/TranslatorView';
 import { useAudioRecorder } from './hooks/useAudioRecorder';
+import { useHistory } from './hooks/useHistory';
 
 const API_URL = import.meta.env.VITE_API_URL;
 const MAX_RECORDING_TIME = 4000; 
@@ -23,6 +24,9 @@ function App() {
     stopRecording, 
     clearBlobUrl 
   } = useAudioRecorder(MAX_RECORDING_TIME);
+
+  // Panggil   useHistory
+  const { history, addHistoryItem, deleteHistoryItems, clearHistory } = useHistory();
 
   useEffect(() => {
     setPrediction(null);
@@ -65,7 +69,14 @@ function App() {
       });
 
       if (response.data.error) throw new Error(response.data.error);
+      
       setPrediction(response.data);
+      
+      // Simpan Ke Riwayat jika sukses
+      addHistoryItem({
+        prediction: response.data.prediction,
+        confidence: response.data.confidence,
+      });
 
     } catch (err: any) {
       setApiError(err.response?.data?.detail || err.message || "Gagal memproses suara. Pastikan server aktif.");
@@ -85,6 +96,12 @@ function App() {
       loading={loading}
       displayError={displayError}
       prediction={prediction}
+      
+      // Props History Baru
+      history={history}
+      onDeleteHistory={deleteHistoryItems}
+      onClearHistory={clearHistory}
+      
       onToggleRecord={isRecording ? stopRecording : startRecording}
       onRetake={handleRetake}
       onTranslate={handleTranslate}
