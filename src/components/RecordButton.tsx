@@ -14,7 +14,7 @@ export default function RecordButton({ isRecording, timeLeft, onToggleRecord }: 
            <>
             <span className="absolute inset-0 rounded-full bg-red-400 opacity-20 animate-ping"></span>
             <span className="absolute inset-0 rounded-full border-4 border-red-500 opacity-50 animate-pulse"></span>
-           </>
+           </> 
         )}
         
         <button
