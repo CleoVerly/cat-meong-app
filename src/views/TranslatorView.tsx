@@ -118,7 +118,8 @@ export default function TranslatorView({
             ) : "Terjemahkan Sekarang 🐾"}
           </button>
 
-          {displayError && (
+          {/* PERUBAHAN: Sembunyikan error jika PredictionModal sedang terbuka */}
+          {displayError && !prediction && (
             <div className="mb-6 p-4 bg-red-50 border border-red-100 text-red-500 rounded-2xl text-center text-xs font-bold animate-pulse">
               {displayError}
             </div>
@@ -128,6 +129,7 @@ export default function TranslatorView({
               <UploadInput file={file} onFileChange={onFileChange} />
           </div>
 
+          {/* Pemanggilan komponen Modal */}
           {prediction && (
             <PredictionModal prediction={prediction} onClose={onClosePrediction} />
           )}

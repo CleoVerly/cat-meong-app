@@ -6,6 +6,50 @@ interface PredictionModalProps {
 }
 
 export default function PredictionModal({ prediction, onClose }: PredictionModalProps) {
+  
+  // --- KONDISI 1: Jika Terjadi Error pada API ---
+  if (prediction.error) {
+    return (
+      <div className="absolute inset-0 bg-white/95 backdrop-blur-md z-50 flex flex-col items-center justify-center p-6 animate-fade-in">
+        <div className="w-full max-w-xs text-center">
+          <div className="text-4xl mb-4">❌</div>
+          <h2 className="text-xl font-bold text-red-600 mb-2">Terjadi Kesalahan</h2>
+          <p className="text-gray-600 text-sm mb-8">{prediction.error}</p>
+          <button 
+            onClick={onClose}
+            className="w-full py-3 rounded-xl bg-gray-900 text-white font-bold text-sm hover:bg-gray-800 transition-colors shadow-lg"
+          >
+            Tutup
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  // --- KONDISI 2: Jika Tahap 1 Menolak (Bukan Kucing) ---
+  if (prediction.is_cat === false) {
+    return (
+      <div className="absolute inset-0 bg-white/95 backdrop-blur-md z-50 flex flex-col items-center justify-center p-6 animate-fade-in">
+        <div className="w-full max-w-xs text-center">
+          <div className="w-20 h-20 bg-amber-100 text-amber-500 rounded-full flex items-center justify-center mx-auto mb-6 text-4xl shadow-inner">
+            ⚠️
+          </div>
+          <h2 className="text-2xl font-black text-gray-800 mb-2 tracking-tight">Bukan Suara Kucing</h2>
+          <p className="text-gray-500 text-sm mb-8 leading-relaxed">
+            {prediction.message || "Sistem mendeteksi bahwa suara ini bukan berasal dari kucing. Silakan coba lagi."}
+          </p>
+          <button 
+            onClick={onClose}
+            className="w-full py-3 rounded-xl bg-amber-500 text-white font-bold text-sm hover:bg-amber-600 transition-colors shadow-lg shadow-amber-500/30"
+          >
+            Coba Rekam Ulang
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  // --- KONDISI 3: Normal (Model Emosi Berjalan) ---
   return (
     <div className="absolute inset-0 bg-white/95 backdrop-blur-md z-50 flex flex-col items-center justify-center p-6 animate-fade-in">
       <div className="w-full max-w-xs text-center">

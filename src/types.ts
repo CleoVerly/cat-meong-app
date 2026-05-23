@@ -1,7 +1,10 @@
 export interface PredictionResponse {
-  prediction: string;
-  confidence: string;
-  scores: Record<string, number>;
+  status?: string;
+  is_cat?: boolean;
+  prediction?: string;
+  confidence?: string;
+  scores?: Record<string, number>;
+  message?: string;
   error?: string;
 }
 
