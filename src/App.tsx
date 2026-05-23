@@ -70,13 +70,17 @@ function App() {
 
       if (response.data.error) throw new Error(response.data.error);
       
-      setPrediction(response.data);
-      
-      // Simpan Ke Riwayat jika sukses
-      addHistoryItem({
-        prediction: response.data.prediction,
-        confidence: response.data.confidence,
-      });
+      // GUARD: Pastikan prediction & confidence ada sebelum disimpan
+      if (response.data.prediction && response.data.confidence) {
+        setPrediction(response.data);
+        addHistoryItem({
+          prediction: response.data.prediction,
+          confidence: response.data.confidence,
+        });
+      } else {
+        // Tangani jika ternyata is_cat: false (bukan kucing)
+        setPrediction(response.data);
+      }
 
     } catch (err: any) {
       setApiError(err.response?.data?.detail || err.message || "Gagal memproses suara. Pastikan server aktif.");

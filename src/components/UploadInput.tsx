@@ -17,10 +17,10 @@ export default function UploadInput({ file, onFileChange }: UploadInputProps) {
       <div className="text-center">
         <label className="cursor-pointer inline-flex items-center justify-center w-full py-3 px-4 rounded-xl text-indigo-500 hover:text-indigo-700 hover:bg-indigo-50 transition-all border border-dashed border-indigo-200 hover:border-indigo-400">
           <Upload className="text-lg mr-2" size={18}/>
-          <span className="text-sm font-medium">{file ? `File: ${file.name}` : "Upload file .wav manual"}</span>
+          <span className="text-sm font-medium">{file ? `File: ${file.name}` : "Upload File Audio"}</span>
           <input 
             type="file" 
-            accept=".wav" 
+            accept="audio/*,.wav,.mp3,.ogg,.m4a" 
             onChange={onFileChange} 
             className="hidden" 
           />
